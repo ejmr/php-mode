@@ -33,6 +33,9 @@
   '((phpactor :test (lambda () (and (require 'phpactor nil t) (featurep 'phpactor)))
               :activate php-ui-phpactor-activate
               :deactivate php-ui-phpactor-activate)
+    (eglot :test (lambda () (and (require 'eglot nil t) (featurep 'eglot)))
+           :activate eglot
+           :deactivate eglot--managed-mode-off)
     (lsp-mode :test (lambda () (and (require 'lsp nil t) (featurep 'lsp)))
               :activate lsp
               :deactivate lsp-workspace-shutdown)))
