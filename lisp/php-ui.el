@@ -33,9 +33,9 @@
   '((phpactor :test (lambda () (and (require 'phpactor nil t) (featurep 'phpactor)))
               :activate php-ui-phpactor-activate
               :deactivate php-ui-phpactor-activate)
-    (lsp-ui :test (lambda () (and (require 'lsp-ui nil t) (featurep 'lsp-ui)))
-            :activate (lambda () (user-error "Not implemented"))
-            :deactivate (lambda () (user-error "Not implemented")))))
+    (lsp-mode :test (lambda () (and (require 'lsp nil t) (featurep 'lsp)))
+              :activate lsp
+              :deactivate lsp-workspace-shutdown)))
 
 (defvar php-ui-impl nil)
 
