@@ -271,13 +271,6 @@ In that case set to `NIL'."
   :tag "PHP Mode Disable c-auto-align-backslashes"
   :type 'boolean)
 
-(define-obsolete-variable-alias 'php-mode-disable-parent-mode-hooks 'php-mode-disable-c-mode-hook "1.21.0")
-(defcustom php-mode-disable-c-mode-hook t
-  "When set to `T', do not run hooks of parent modes (`java-mode', `c-mode')."
-  :group 'php-mode
-  :tag "PHP Mode Disable C Mode Hook"
-  :type 'boolean)
-
 (defcustom php-mode-enable-project-local-variable t
   "When set to `T', apply project local variable to buffer local variable."
   :group 'php-mode
@@ -306,6 +299,7 @@ In that case set to `NIL'."
 
 (defvar php-mode-map
   (let ((map (make-sparse-keymap "PHP Mode")))
+    (set-keymap-parent map c-mode-base-map)
     ;; Remove menu item for c-mode
     (define-key map [menu-bar C] nil)
 
@@ -1106,13 +1100,13 @@ After setting the stylevars run hooks according to STYLENAME
     table))
 
 ;;;###autoload
-(define-derived-mode php-mode c-mode "PHP"
+(define-derived-mode php-mode prog-mode "PHP"
   "Major mode for editing PHP code.
 
 \\{php-mode-map}"
+  :group 'php-mode
   :syntax-table php-mode-syntax-table
-  ;; :after-hook (c-update-modeline)
-  ;; (setq abbrev-mode t)
+  :after-hook (c-update-modeline)
 
   (unless (string= php-mode-cc-vertion c-version)
     (user-error "CC Mode has been updated.  %s"
@@ -1120,9 +1114,6 @@ After setting the stylevars run hooks according to STYLENAME
                     "Please run `M-x package-reinstall php-mode' command."
                   "Please byte recompile PHP Mode files.")))
 
-  (when php-mode-disable-c-mode-hook
-    (setq-local c-mode-hook nil)
-    (setq-local java-mode-hook nil))
   (c-initialize-cc-mode t)
   (c-init-language-vars php-mode)
   (c-common-init 'php-mode)
